@@ -10,6 +10,7 @@ use Tests\Builders\Stub\StubUser;
 
 final class UserBuilder
 {
+    private int $id;
     private string $name;
     private string $email;
     private ?DateTimeImmutable $email_verified_at;
@@ -19,11 +20,16 @@ final class UserBuilder
     private DateTimeImmutable $updatedAt;
 
     // Relationships
-    public Collection $roles;
+    private Collection $roles;
 
     public function __construct()
     {
+        $this->id = 1;
+        $this->name = '';
+        $this->email = '';
         $this->email_verified_at = null;
+        $this->password = '';
+        $this->remember_token = '';
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
 
@@ -34,6 +40,7 @@ final class UserBuilder
     {
         $user = new StubUser();
         $user->setDateFormat('Y-m-d');
+        $user->id = $this->id;
         $user->name = $this->name;
         $user->email = $this->email;
         $user->email_verified_at = $this->email_verified_at;
@@ -47,6 +54,13 @@ final class UserBuilder
         return $user;
     }
 
+    public function withId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function withEmail(string $email): self
     {
         $this->email = $email;
@@ -54,9 +68,9 @@ final class UserBuilder
         return $this;
     }
 
-    public function withRoles(Collection $roles): self
+    public function withRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = new Collection($roles);
 
         return $this;
     }
